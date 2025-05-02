@@ -1,0 +1,7 @@
+# Ignorar entorno virtual
+s5_django_env/
+__pycache__/
+*.pyc
+*.sqlite3
+*.log
+*.env
