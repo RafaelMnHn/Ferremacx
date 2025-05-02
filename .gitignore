@@ -1,7 +1,15 @@
-# Ignorar entorno virtual
+# Entorno virtual
 s5_django_env/
+venv/
+env/
+
+# Archivos Python
 __pycache__/
 *.pyc
+
+# Base de datos
 *.sqlite3
+
+# Configuraciom
 *.log
 *.env
