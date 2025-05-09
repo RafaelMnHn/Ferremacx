@@ -1,0 +1,27 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4 box-element">
+        <h3 class="text-center mb-4">Iniciar sesión</h3>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <label>Usuario</label>
+                <input type="text" name="username" class="form-control" placeholder="Nombre de usuario" required>
+            </div>
+            <div class="form-group mb-3">
+                <label>Contraseña</label>
+                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Ingresar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
