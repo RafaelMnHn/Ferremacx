@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User, Group
 from django.contrib import messages
+from django.shortcuts import render, redirect
 
 def login_view(request):
     if request.method == 'POST':
@@ -30,3 +31,89 @@ def login_view(request):
             return redirect('login')
 
     return render(request, 'user/login.html')
+
+    from django.contrib.auth.models import User, Group
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
+def registro_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if password1 != password2:
+            messages.warning(request, 'Las contraseñas no coinciden.')
+            return redirect('registro')
+
+        if User.objects.filter(username=username).exists():
+            messages.warning(request, 'El nombre de usuario ya está en uso.')
+            return redirect('registro')
+
+        user = User.objects.create_user(username=username, email=email, password=password1)
+
+        # Asignar al grupo "Cliente"
+        grupo_cliente, creado = Group.objects.get_or_create(name='Cliente')
+        user.groups.add(grupo_cliente)
+
+        messages.success(request, 'Cuenta creada correctamente. Inicia sesión.')
+        return redirect('login')
+
+    return render(request, 'user/registro.html')
+
+
+    # Diccionario temporal de tokens de prueba
+RECOVERY_TOKENS = {}
+
+def recuperar_contraseña(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = User.objects.filter(email=email).first()
+
+        if user:
+            token = get_random_string(length=6)
+            RECOVERY_TOKENS[email] = token  # Simula guardar el token (DB futura)
+
+            # Envío real por correo (API)
+            # send_email(email, token)
+
+            print(f"[SIMULADO] Código de recuperación para {email}: {token}")
+
+        messages.info(request, 'Si el correo existe, se ha enviado un código de recuperación.')
+        return redirect('recuperar')
+
+    return render(request, 'user/recuperar.html')
+
+def restablecer_contraseña(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        token_ingresado = request.POST.get('token')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        user = User.objects.filter(email=email).first()
+        token_correcto = RECOVERY_TOKENS.get(email)
+
+        if not user:
+            messages.warning(request, 'Usuario no encontrado.')
+            return redirect('restablecer')
+
+        if token_ingresado != token_correcto:
+            messages.warning(request, 'Código incorrecto.')
+            return redirect('restablecer')
+
+        if password1 != password2:
+            messages.warning(request, 'Las contraseñas no coinciden.')
+            return redirect('restablecer')
+
+        user.set_password(password1)
+        user.save()
+
+        # Opcional: eliminar token después de usarlo
+        RECOVERY_TOKENS.pop(email, None)
+
+        messages.success(request, 'Contraseña actualizada. Ahora puedes iniciar sesión.')
+        return redirect('login')
+
+    return render(request, 'user/restablecer.html')

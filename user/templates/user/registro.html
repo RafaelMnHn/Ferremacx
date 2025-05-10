@@ -1,0 +1,37 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center mt-3 mb-5">
+    <div class="col-md-4 box-element">
+        <h3 class="text-center mb-4">Registrarse</h3>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <label>Usuario</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="form-group mb-3">
+                <label>Correo electrónico</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group mb-3">
+                <label>Contraseña</label>
+                <input type="password" name="password1" class="form-control" required>
+            </div>
+            <div class="form-group mb-3">
+                <label>Confirmar contraseña</label>
+                <input type="password" name="password2" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Crear cuenta</button>
+            <a href="{% url 'login' %}" class="btn btn-link mt-2">Volver a inicio de sesión</a>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
