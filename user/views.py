@@ -18,11 +18,11 @@ def login_view(request):
             if user.groups.filter(name='Administrador').exists():
                 return redirect('admin_dashboard') 
             elif user.groups.filter(name='Vendedor').exists():
-                return redirect('vendedor_dashboard')
+                return redirect('vista_vendedor')
             elif user.groups.filter(name='Bodeguero').exists():
-                return redirect('bodeguero_dashboard')
+                return redirect('vista_bodeguero')
             elif user.groups.filter(name='Contador').exists():
-                return redirect('contador_dashboard')
+                return redirect('vista_contador')
             elif user.groups.filter(name='Cliente').exists():
                 return redirect('tienda')  # Vista tienda
             else:
