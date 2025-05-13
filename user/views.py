@@ -2,7 +2,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from .decorators import rol_requerido
 
+# Login con redirección por grupo
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -14,13 +16,13 @@ def login_view(request):
             login(request, user)
             # Redirigir según grupo
             if user.groups.filter(name='Administrador').exists():
-                return redirect('admin_dashboard')  # Ruta a definir
+                return redirect('admin_dashboard') 
             elif user.groups.filter(name='Vendedor').exists():
-                return redirect('vista_vendedor')
+                return redirect('vendedor_dashboard')
             elif user.groups.filter(name='Bodeguero').exists():
-                return redirect('vista_bodeguero')
+                return redirect('bodeguero_dashboard')
             elif user.groups.filter(name='Contador').exists():
-                return redirect('vista_contador')
+                return redirect('contador_dashboard')
             elif user.groups.filter(name='Cliente').exists():
                 return redirect('tienda')  # Vista tienda
             else:
@@ -32,10 +34,7 @@ def login_view(request):
 
     return render(request, 'user/login.html')
 
-    from django.contrib.auth.models import User, Group
-from django.contrib import messages
-from django.shortcuts import render, redirect
-
+#Registro con asignacion de grupo
 def registro_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -63,8 +62,26 @@ def registro_view(request):
     return render(request, 'user/registro.html')
 
 
+# Vistas protegidas
+@rol_requerido('Vendedor')
+def vista_vendedor(request):
+    return render(request, 'user/vendedor_dashboard.html')
+
+@rol_requerido('Bodeguero')
+def vista_bodeguero(request):
+    return render(request, 'user/bodeguero_dashboard.html')
+
+@rol_requerido('Contador')
+def vista_contador(request):
+    return render(request, 'user/contador_dashboard.html')
+
+@rol_requerido('Administrador')
+def vista_administrador(request):
+    return render(request, 'user/admin_dashboard.html')
+
+#Recuperar contraseña
     # Diccionario temporal de tokens de prueba
-RECOVERY_TOKENS = {}
+    RECOVERY_TOKENS = {}
 
 def recuperar_contraseña(request):
     if request.method == 'POST':
@@ -85,6 +102,7 @@ def recuperar_contraseña(request):
 
     return render(request, 'user/recuperar.html')
 
+#Restablecer contraseña
 def restablecer_contraseña(request):
     if request.method == 'POST':
         email = request.POST.get('email')
