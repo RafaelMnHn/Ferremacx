@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from .models import Producto
 
 def tienda(request):
-    context = {}
+    productos = Producto.objects.all()
+    context = {'productos': productos}
     return render(request, 'store/tienda.html', context)
 
 def carrito(request):
