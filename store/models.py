@@ -30,6 +30,14 @@ class Producto(models.Model):
     def __str__(self):
         return self.nombre
 
+    @property
+    def imageURL(self):
+        try:
+            url = self.imagen.url
+        except:
+            url = ''
+        return url
+
 # Orden y detalle de orden
 class Orden(models.Model):
     ESTADOS = [

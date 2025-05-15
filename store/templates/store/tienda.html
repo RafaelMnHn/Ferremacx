@@ -3,15 +3,14 @@
 {% block content %}
 
 <div class="row mb-5">
-{% for producto in productos %}
-  {% if producto.stock > 0 %}
-  
+  {% for producto in productos %}
+    {% if producto.stock > 0 %}
     <div class="col-lg-4">
       <div class="box-element product">
         {% if producto.imagen %}
-          <img src="{{ producto.imagen.url }}" class="thumbnail">
+          <img src="{{ producto.imageURL }}" class="thumbnail">
         {% else %}
-          <img src="{% static 'images/default.png' %}" class="thumbnail">
+          <img src="{% static 'images/imgplaceholder.png' %}" class="thumbnail">
         {% endif %}
         <h6><strong>{{ producto.nombre }}</strong></h6>
         <p>{{ producto.descripcion|truncatewords:10 }}</p>
@@ -21,9 +20,8 @@
         <h4 style="float: right;">${{ producto.precio }}</h4>
       </div>
     </div>
-  
-  {% endif %}
-{% endfor %}
+    {% endif %}
+  {% endfor %}
 </div>
 
 {% endblock content %}
