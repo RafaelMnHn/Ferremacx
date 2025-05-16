@@ -9,36 +9,39 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 </head>
 <body>
-  <!-- // NAVBAR // -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-	  <a class="navbar-brand" href="{% url 'tienda' %}">Ferremax</a>
-	  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  	
+<!-- // NAVBAR // -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+	<a class="navbar-brand" href="{% url 'tienda' %}">Ferremax</a>
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
-	  </button>
+	</button>
 
-	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	    <ul class="navbar-nav me-auto">
-	      <li class="nav-item active">
-	        <a class="nav-link" href="{% url 'tienda' %}">Tienda <span class="sr-only">(current)</span></a>
-	      </li>
-	 
-	    </ul>
-	    <div class="d-flex align-items-center gap-3">
-	     	<a href="{% url 'login' %}"class="btn btn-warning">Ingresar</a>
-	     	<a href="{% url 'carrito' %}">
-	    		<img  id="cart-icon" src="{% static 'images/cart.png' %}">
-	    	</a>
-	    	<p id="cart-total">{{ cartItems }}</p>
-	    </div>
-	  </div>
-	</nav>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav me-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="{% url 'tienda' %}">Tienda <span class="sr-only">(current)</span></a>
+			</li>
+		</ul>
+		
+		<div class="d-flex align-items-center gap-3">
+			<a href="{% url 'login' %}"class="btn btn-warning">Ingresar</a>
+			<a href="{% url 'carrito' %}">
+				<img  id="cart-icon" src="{% static 'images/cart.png' %}">
+			</a>
+			{% if cartItems > 0 %}
+			<p id="cart-total">{{ cartItems }}</p>
+			{% endif %}
+		</div>
+	</div>
+</nav>
 
-  <div class="container">
+<div class="container">
     <br>
     {% block content %}
 
     {% endblock content %}
-  </div>
+</div>
 
 
     <!-- // Bootstrap // -->

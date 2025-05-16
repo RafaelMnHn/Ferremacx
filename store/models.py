@@ -38,6 +38,7 @@ class Producto(models.Model):
             url = ''
         return url
 
+
 # Orden y detalle de orden
 class Orden(models.Model):
     ESTADOS = [
@@ -56,6 +57,14 @@ class Orden(models.Model):
     def __str__(self):
         return f"Orden #{self.id} - {self.cliente.username}"
 
+    @property
+    def total(self):
+        return sum([item.total for item in self.detalles.all()])
+
+    @property
+    def total_items(self):
+        return sum([item.cantidad for item in self.detalles.all()])
+
 class DetalleOrden(models.Model):
     orden = models.ForeignKey(Orden, on_delete=models.CASCADE, related_name='detalles')
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
@@ -64,6 +73,11 @@ class DetalleOrden(models.Model):
 
     def __str__(self):
         return f"{self.producto} x {self.cantidad}"
+
+    @property
+    def total(self):
+        return self.cantidad * self.precio_unitario
+
 
 # Dirección del envío 
 class DireccionEnvio(models.Model):

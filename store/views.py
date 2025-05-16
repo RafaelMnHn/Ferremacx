@@ -16,6 +16,7 @@ def carrito(request):
     context = {
         'items': datos['items'],
         'orden': datos['orden'],
+        'cartItems': datos['orden'].total_items,
     }
     return render(request, 'store/carrito.html', context)
 
@@ -37,8 +38,10 @@ def obtener_carrito(request):
 @login_required(login_url='login')
 def checkout(request):
     contexto_carrito = obtener_carrito(request)
+    datos = obtener_carrito(request)
     context = {
         'items': contexto_carrito['items'],
-        'orden': contexto_carrito['orden']
+        'orden': contexto_carrito['orden'],
+        'cartItems': datos['orden'].total_items,
     }
     return render(request, 'store/checkout.html', context)

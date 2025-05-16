@@ -4,12 +4,13 @@
 
 <div class="row mt-4">
   <div class="col-lg-12">
-    <div class="box-element">
+    <div class="box-element p-4">
       <a href="{% url 'tienda' %}" class="btn btn-outline-dark">&#x2190; Seguir comprando</a>
       <br><br>
       <table class="table">
         <thead>
           <tr>
+            <th></th>
             <th>Producto</th>
             <th>Precio</th>
             <th>Cantidad</th>
@@ -19,17 +20,26 @@
         <tbody>
           {% for item in items %}
             <tr>
+              <td style="display: flex; align-items: center;">
+                <img src="{{ item.producto.imageURL }}" class="row-image me-2" alt="imagen">
+                
+              </td>
               <td>{{ item.producto.nombre }}</td>
               <td>${{ item.precio_unitario }}</td>
               <td>{{ item.cantidad }}</td>
-              <td>${{ item.precio_unitario|floatformat:0|add:""|add:item.cantidad|floatformat:0 }}</td>
+              <td>${{ item.total }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
 
       <hr>
-      <h5>Total: ${{ orden.total }}</h5>
+      <h5>Detalle </h5>
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="mb-0">{{ orden.total_items }} ítems</p>
+       <h5 class="mb-0">Total: ${{ orden.total }}</h5>
+      </div>
+
 
       {% if user.is_authenticated %}
         <a href="{% url 'checkout' %}" class="btn btn-success w-100 mt-3">Proceder al Checkout</a>

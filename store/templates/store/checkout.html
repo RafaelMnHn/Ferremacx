@@ -40,31 +40,39 @@
                 <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
             </form>
         </div>
-
-        <br>
-        <div class="box-element hidden" id="payment-info">
-            <small>Paypal Options</small>
-        </div>
-        
     </div>
 
     <div class="col-lg-6">
-        <div class="box-element">
-            <a  class="btn btn-outline-dark" href="{% url 'carrito' %}">&#x2190; Back to Cart</a>
-            <hr>
-            <h3>Order Summary</h3>
-            <hr>
-            <div class="cart-row">
-                <div style="flex:2"><img class="row-image" src="{% static 'images/imgplaceholder.png' %}"></div>
-                <div style="flex:2"><p>Product 1</p></div>
-                <div style="flex:1"><p>$20.00</p></div>
-                <div style="flex:1"><p>x2</p></div>
+        <div class="box-element mt-1 p-3">
+            <a href="{% url 'carrito' %}" class="btn btn-outline-dark">&#x2190; Volver al carrito</a>
+
+            <h3 class="mt-4">Resumen del pedido</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr>
+                    <td>{{ item.producto.nombre }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>${{ item.total }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center ps-2 pe-4">
+             <p class="mb-0">{{ orden.total_items }} productos</p>
+              <h5 class="mb-0">Total: ${{ orden.total }}</h5>
             </div>
-            <h5>Items:   2</h5>
-            <h5>Total:   $4</h5>
+
+            <button class="btn btn-success w-100 mt-3">Confirmar pedido</button>
         </div>
     </div>
-</div>
 
-    
 {% endblock content %}
