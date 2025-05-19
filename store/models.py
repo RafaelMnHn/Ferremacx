@@ -50,6 +50,7 @@ class Orden(models.Model):
     ]
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
+    fecha_confirmacion = models.DateTimeField(null=True, blank=True)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
     retiro_en_tienda = models.BooleanField(default=False)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -82,7 +83,8 @@ class DetalleOrden(models.Model):
 # Dirección del envío 
 class DireccionEnvio(models.Model):
     orden = models.OneToOneField(Orden, on_delete=models.CASCADE)
-    direccion = models.CharField(max_length=255)
+    direccion = models.CharField(max_length=200)
+    ciudad = models.CharField(max_length=100)
     comuna = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
