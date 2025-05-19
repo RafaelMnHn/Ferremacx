@@ -15,7 +15,7 @@
         <h6><strong>{{ producto.nombre }}</strong></h6>
         <p>{{ producto.descripcion|truncatewords:10 }}</p>
         <hr>
-        <button class="btn btn-outline-secondary add-btn">Agregar</button>
+        <button data-product="{{ producto.id }}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Agregar</button>
         <a class="btn btn-outline-success" href="#">Ver</a>
         <h4 style="float: right;">${{ producto.precio }}</h4>
       </div>

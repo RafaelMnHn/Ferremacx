@@ -26,7 +26,11 @@
               </td>
               <td>{{ item.producto.nombre }}</td>
               <td>${{ item.precio_unitario }}</td>
-              <td>{{ item.cantidad }}</td>
+              <td class="text-center">
+                <img class="chg-quantity update-cart" src="{% static 'images/arrow-up.png' %}" data-product="{{ item.producto.id }}" data-action="add">
+                <p class="quantity">{{ item.cantidad }}</p>
+                <img class="chg-quantity update-cart" src="{% static 'images/arrow-down.png' %}" data-product="{{ item.producto.id }}" data-action="remove">
+              </td>
               <td>${{ item.total }}</td>
             </tr>
           {% endfor %}
