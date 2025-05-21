@@ -124,10 +124,19 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+# Media
+
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Webpay REST - integración
+
+TBK_COMMERCE_CODE = '597055555532'
+
+TBK_API_KEY_SECRET = 'X.509_API_KEY_PRUEBA'  # reemplaza con valor oficial

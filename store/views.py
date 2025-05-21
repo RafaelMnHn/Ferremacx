@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Orden, DetalleOrden, Producto
+from .models import Orden, DetalleOrden, Producto, DireccionEnvio
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 from django.utils import timezone
+import requests
+from django.urls import reverse
+from django.conf import settings
 
 def tienda(request):
     context_carrito = obtener_carrito(request)
@@ -105,7 +108,6 @@ def procesarOrden(request):
     DireccionEnvio.objects.get_or_create(
         orden=orden,
         defaults={
-            'cliente': cliente,
             'direccion': data['direccion'],
             'ciudad': data['ciudad'],
             'region': data['region'],
@@ -119,3 +121,64 @@ def procesarOrden(request):
     orden.save()
 
     return JsonResponse('Pedido procesado correctamente', safe=False)
+
+# Crear transacción webpay
+def iniciar_pago_rest(request):
+    cliente = request.user
+    orden = Orden.objects.filter(cliente=cliente, estado='pagada').last()
+
+    if not orden:
+        return redirect('tienda')
+
+    url_retorno = request.build_absolute_uri(reverse('pago_exitoso_rest'))
+
+    headers = {
+        'Tbk-Api-Key-Id': settings.TBK_COMMERCE_CODE,
+        'Tbk-Api-Key-Secret': settings.TBK_API_KEY_SECRET,
+        'Content-Type': 'application/json'
+    }
+
+    data = {
+        "buy_order": str(orden.id),
+        "session_id": str(cliente.id),
+        "amount": float(orden.total),
+        "return_url": url_retorno
+    }
+
+    response = requests.post(
+        'https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpayplus/v1/transactions',
+        headers=headers,
+        json=data
+    )
+
+    result = response.json()
+    token = result['token']
+    url = result['url']
+
+    return redirect(f"{url}?token_ws={token}")
+
+# Retorno / commit de transacción 
+@csrf_exempt
+def pago_exitoso_rest(request):
+    token = request.GET.get('token_ws')
+    if not token:
+        return HttpResponse("Token no proporcionado", status=400)
+
+    headers = {
+        'Tbk-Api-Key-Id': settings.TBK_COMMERCE_CODE,
+        'Tbk-Api-Key-Secret': settings.TBK_API_KEY_SECRET,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.put(
+        f'https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpayplus/v1/transactions/{token}',
+        headers=headers
+    )
+
+    result = response.json()
+    orden_id = result['buy_order']
+    orden = Orden.objects.get(id=orden_id)
+    orden.estado = 'completada'
+    orden.save()
+
+    return render(request, 'store/pago_exitoso.html', {'orden': orden})

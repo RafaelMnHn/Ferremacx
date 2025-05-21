@@ -58,7 +58,14 @@
             </div>
 
             <button class="btn btn-success w-100 mt-3">Confirmar pedido</button>
+            <a href="{% url 'iniciar-pago-rest' %}" class="btn btn-success w-100 mt-3">Pagar con Webpay REST</a>
+
         </div>
     </div>
 </div>
+
+<script>
+  const ordenTotal = parseFloat("{{ orden.total|floatformat:2 }}");
+</script>
+
 {% endblock content %}

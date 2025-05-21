@@ -17,7 +17,7 @@ document.getElementById('form-envio').addEventListener('submit', function (e) {
       ciudad: this.ciudad.value,
       comuna: this.comuna.value,
       region: this.region.value,
-      total: "{{ orden.total }}",
+      total: ordenTotal 
     };
 
     fetch('/procesar-orden/', {
