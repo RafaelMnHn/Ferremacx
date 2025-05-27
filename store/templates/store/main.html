@@ -32,6 +32,18 @@
 			{% if cartItems > 0 %}
 			<p id="cart-total">{{ cartItems }}</p>
 			{% endif %}
+
+			{% if user.is_authenticated %}
+			<form action="{% url 'logout' %}" method="post" style="display:inline;">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-outline-danger">Cerrar sesión</button>
+			</form>
+			{% endif %}
+
+
+
+
+
 		</div>
 	</div>
 </nav>

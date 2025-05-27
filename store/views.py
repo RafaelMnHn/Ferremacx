@@ -94,7 +94,7 @@ def procesarOrden(request):
     data = json.loads(request.body)
     cliente = request.user
     total_frontend = float(data['total']) 
-    orden = Orden.objects.filter(cliente=cliente, estado='pendiente').first()
+    orden = Orden.objects.filter(cliente=cliente, estado='confirmada').first()
 
     # Buscar orden pendiente
     if not orden:
@@ -125,7 +125,7 @@ def procesarOrden(request):
 # Crear transacción webpay
 def iniciar_pago_rest(request):
     cliente = request.user
-    orden = Orden.objects.filter(cliente=cliente, estado='pagada').last()
+    orden = Orden.objects.filter(cliente=cliente, estado='pendiente').last()
 
     if not orden:
         return redirect('tienda')

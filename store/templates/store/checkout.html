@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="box-element p-3 mb-2" id="form-wrapper">
-            <form id="form-envio">
+            <form id="form-envio"  data-total="{{ orden.total|floatformat:2 }}">
                 <div class="form-group mb-2">
                     <label>Dirección</label>
                     <input class="form-control" type="text" name="direccion" required>
@@ -22,8 +22,7 @@
                     <label>Ciudad</label>
                     <input class="form-control" type="text" name="ciudad" required>
                 </div>
-
-                <button type="submit" class="btn btn-dark w-100 mt-3">Confirmar pedido</button>
+                <button type="submit" class="btn btn-success w-100 mt-3">Pagar con Webpay REST</button>
             </form>
         </div>
     </div>
@@ -56,16 +55,8 @@
              <p class="mb-0">{{ orden.total_items }} productos</p>
               <h5 class="mb-0">Total: ${{ orden.total }}</h5>
             </div>
-
-            <button class="btn btn-success w-100 mt-3">Confirmar pedido</button>
-            <a href="{% url 'iniciar-pago-rest' %}" class="btn btn-success w-100 mt-3">Pagar con Webpay REST</a>
-
         </div>
     </div>
 </div>
-
-<script>
-  const ordenTotal = parseFloat("{{ orden.total|floatformat:2 }}");
-</script>
 
 {% endblock content %}
